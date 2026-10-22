@@ -1,0 +1,9 @@
+[browser]
+gatherUsageStats = false
+
+[theme]
+base = "dark"
+font = "Poppins:https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+
+# [server]
+# enableStaticServing = true
