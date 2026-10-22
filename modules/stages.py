@@ -82,8 +82,8 @@ def display_upload_screen(config):
     st.space(size="large")
 
     # 2x2 Grid setup
-    row1_col1, row1_col2 = st.columns(2, gap="large")
-    row2_col1, row2_col2 = st.columns(2, gap="large")
+    row1_col1, row1_col2 = st.columns(2, gap="large", border=True)
+    row2_col1, row2_col2 = st.columns(2, gap="large", border=True)
     grid_cols = [row1_col1, row1_col2, row2_col1, row2_col2]
 
     for idx, (col, caption) in enumerate(zip(grid_cols, config["IMAGE_CAPTIONS"]), start=1):
@@ -105,14 +105,6 @@ def display_upload_screen(config):
 
 
             # File uploader
-            # <!-- Center the upload buttons -->
-            #     <style>
-            #                 [data-testid="stFileUploaderDropzone"] {
-            #         display: flex !important;
-            #         justify-content: center !important;
-            #         align-items: center !important;
-            #     }
-            #     </style>
             st.markdown(
                 """
                 <!-- Hide hints for '200MB' and file types -->
@@ -121,6 +113,15 @@ def display_upload_screen(config):
                 div[data-testid="stFileUploaderDropzoneInstructions"],
                 div[data-testid="stFileUploaderDropzone"] {
                     display: none !important;
+                }
+                </style>
+
+                <!-- Center the upload buttons -->
+                <style>
+                            [data-testid="stFileUploaderDropzone"] {
+                    display: flex !important;
+                    justify-content: center !important;
+                    align-items: center !important;
                 }
                 </style>
 
@@ -134,7 +135,7 @@ def display_upload_screen(config):
                 label_visibility="hidden"
             )
             
-            st.space("medium")
+            st.space("small")
 
             if uploaded_file:
                 file_id = getattr(uploaded_file, "file_id", uploaded_file.name)
@@ -156,7 +157,7 @@ def display_upload_screen(config):
                     width=250
                 )
 
-    st.space(size="small")
+    st.space(size="medium")
 
     
     # Continue button

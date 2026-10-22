@@ -12,6 +12,5 @@ wheels/
 # Project files
 archive/
 logs/
-*.jpg
-*.png
 images/
+plan.txt
