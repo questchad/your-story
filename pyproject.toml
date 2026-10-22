@@ -15,5 +15,5 @@ dependencies = [
     "openai-whisper>=20250625",
     "sounddevice>=0.5.5",
     "soundfile>=0.13.1",
-    "streamlit>=1.55.0",
+    "streamlit>=1.65.0",
 ]
