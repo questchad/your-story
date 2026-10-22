@@ -1,8 +1,8 @@
+import base64
 import os
 import yaml
 
 import streamlit as st
-
 
 @st.cache_data()
 def load_config():
@@ -14,3 +14,16 @@ def load_config():
     )
      
     return config
+
+
+def set_background():
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-color: #05182d
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )

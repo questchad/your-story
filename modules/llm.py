@@ -21,7 +21,7 @@ def load_agent(config):
     )
 
     # Automatic prompt caching
-    # Will rarely be invoked due to token minimums https://platform.claude.com/docs/en/build-with-claude/prompt-caching#cache-limitations
+    # Token minimums https://platform.claude.com/docs/en/build-with-claude/prompt-caching#cache-limitations
     middleware = [AnthropicPromptCachingMiddleware()] if config["LLM_PROVIDER"] == "anthropic" else None
     agent = create_agent(
         llm,

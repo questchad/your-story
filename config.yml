@@ -1,4 +1,13 @@
+# Flow
 MAX_QUESTIONS: 8
+
+# Appearance
+IMAGE_CAPTIONS:
+    - "Age 1-5"
+    - "Age 6-10"
+    - "Age 11-15"
+    - "Current"
+
 DEBUG: FALSE
 
 # Gemma4: begin with <|think|> to enable thinking

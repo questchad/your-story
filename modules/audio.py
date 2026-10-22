@@ -1,6 +1,8 @@
 import base64
 import io
+import os
 
+from elevenlabs.client import ElevenLabs
 from loguru import logger
 from mutagen.mp3 import MP3
 import streamlit as st
@@ -14,6 +16,13 @@ def load_whisper(whisper_model):
     model = whisper.load_model(whisper_model)
     logger.info("Load whisper: Done")
     return model
+
+
+@st.cache_resource()
+def load_elevenlabs_client():
+    return ElevenLabs(
+         api_key=os.getenv("ELEVENLABS_API_KEY_DEV"),
+    )
 
 
 def play_speech(audio_player, elevenlabs_tts_response):

@@ -5,7 +5,7 @@ from PIL import Image
 import streamlit as st
 
 
-def process_image(uploaded_image, config):
+def process_image(uploaded_image, idx, config):
     """Processes uploaded image for both LLM and display on screen (separately)
     
     Standardizes the image file uploaded by Streamlit file_uploader for the file type, size for LLM limits
@@ -18,15 +18,15 @@ def process_image(uploaded_image, config):
         img = Image.open(uploaded_image)
     except Exception as e:
         st.error("Sorry, a problem occurred loading your image file. Could you try another image?")
-        if "image_for_llm" in st.session_state:
-            del st.session_state["image_for_llm"]
-        if "image_to_display" in st.session_state:
-            del st.session_state["image_to_display"]
+        if f"image_for_llm_{idx}" in st.session_state:
+            del st.session_state[f"image_for_llm_{idx}"]
+        if f"image_for_display_{idx}" in st.session_state:
+            del st.session_state[f"image_for_display_{idx}"]
         st.session_state["file_uploader_id"] += 1   # Clear the file uploader widget
-        st.session_state["uploaded_image_id"] += 1  # Clear the image widget
+        st.session_state[f"uploaded_image_id_{idx}"] += 1  # Clear the image widget
     
     # Image for display: Store the original, unmodified image
-    st.session_state["image_for_display"] = img
+    st.session_state[f"image_for_display_{idx}"] = img
 
     # Image for LLM: modify for API requirements and optimal LLM interpretation
     ## Convert to JPG
@@ -80,8 +80,8 @@ def process_image(uploaded_image, config):
     image_data_for_llm = buffer.getvalue() # Read the buffer (virtual file) into a bytes object, as required by LLM APIs and st.image()
 
     if config["DEBUG"]:
-        img.save("final_image.jpg")
-        logger.info("Saved image file, with conversion if necessary, to 'final_image.jpg'")
+        img.save(f"final_image_{idx}.jpg")
+        logger.info(f"Saved image file, with conversion if necessary, to 'final_image_{idx}.jpg'")
 
     return image_data_for_llm
 
