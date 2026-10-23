@@ -8,7 +8,7 @@ import streamlit as st
 from modules.audio import load_elevenlabs_client
 from modules.image import process_image
 from modules.llm import load_agent
-from modules.utils import set_background
+from modules.utils import initialize_current_image_idx, set_background
 
 def initialize_app(config):
     logger.info("Initializing app")
@@ -71,7 +71,7 @@ def display_upload_screen(config):
         </style>
 
         <div style="text-align: center">
-        <div style="font-family: 'Great Vibes', cursive; font-size: 124px; font-weight: normal; margin-top: 10px; margin-bottom: 25px;">
+        <div style="font-family: 'Great Vibes', cursive; font-size: 124px; font-weight: normal; margin-top: -10px; margin-bottom: 25px;">
             Your Journey
         </div>
         <div style="font-size: 22px">Please upload photos from different times in your life.</div>
@@ -91,49 +91,45 @@ def display_upload_screen(config):
             # Caption over each uploader
             st.markdown(body=f"""<div style="font-size: 28px; margin-bottom:22px">{caption}</div>""", unsafe_allow_html=True, text_alignment="center")
 
-            # Create a place to display the uploaded image
+            # Create a place to display the uploaded image or uploader
             image_outer_container = col.container(
                 horizontal_alignment="center",
-                border=False,
+                # border=True,
             )
-            image_container =  image_outer_container.container(
-                height=150,
-                horizontal_alignment="center",
-                vertical_alignment="center",
-                border=False 
-            )
-
 
             # File uploader
-            st.markdown(
-                """
-                <!-- Hide hints for '200MB' and file types -->
+            uploaded_file = None
+            if f"image_for_display_{idx}" not in st.session_state:
+                st.markdown(
+                    """
+                    <!-- Hide hints for '200MB' and file types -->
 
-                <style>
-                div[data-testid="stFileUploaderDropzoneInstructions"],
-                div[data-testid="stFileUploaderDropzone"] {
-                    display: none !important;
-                }
-                </style>
+                    <style>
+                    div[data-testid="stFileUploaderDropzoneInstructions"],
+                    div[data-testid="stFileUploaderDropzone"] {
+                        display: none !important;
+                    }
+                    </style>
 
-                <!-- Center the upload buttons -->
-                <style>
-                            [data-testid="stFileUploaderDropzone"] {
-                    display: flex !important;
-                    justify-content: center !important;
-                    align-items: center !important;
-                }
-                </style>
+                    <!-- Center the upload buttons -->
+                    <style>
+                                [data-testid="stFileUploaderDropzone"] {
+                        display: flex !important;
+                        justify-content: center !important;
+                        align-items: center !important;
+                    }
+                    </style>
 
-                """,
-                unsafe_allow_html=True,
-            )
-            uploaded_file = st.file_uploader(
-                label=caption,
-                key=st.session_state[f"file_uploader_id_{idx}"],
-                type=config["IMAGE_TYPES"],
-                label_visibility="hidden"
-            )
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+                uploaded_file = image_outer_container.file_uploader(
+                    label=caption,
+                    key=st.session_state[f"file_uploader_id_{idx}"],
+                    type=config["IMAGE_TYPES"],
+                    label_visibility="hidden",
+                )
             
             st.space("large")
 
@@ -144,34 +140,44 @@ def display_upload_screen(config):
                         uploaded_image=uploaded_file, idx=idx, config=config
                     )
                     st.session_state[f"processed_file_id_{idx}"] = file_id
+                st.rerun()
             else:
                 if f"image_for_llm_{idx}" in st.session_state:
                     del st.session_state[f"image_for_llm_{idx}"]
                 if f"processed_file_id_{idx}" in st.session_state:
                     del st.session_state[f"processed_file_id_{idx}"]
     
-            # Update the displayed image above
-            image_container.markdown(
-                """
-                <!-- Make the image fit without scrollbars -->
-                <style>
-                div[data-testid="stImageContainer"] img {
-                    border: 2px;
-                    max-height: 130px;
-                    width: auto !important;
-                    max-width: 100%;
-                    border-radius: 18px;
-                }
-                </style>
-                """,
-                unsafe_allow_html=True,
-            )
+            # Display/update the displayed image
             if f"image_for_display_{idx}" in st.session_state:
+                
+                image_container = image_outer_container.container(
+                    height=200,
+                    horizontal_alignment="center",
+                    vertical_alignment="center",
+                    border=False 
+                )
+                image_container.markdown(
+                    """
+                    <!-- Make the image fit without scrollbars -->
+                    <style>
+                    div[data-testid="stImageContainer"] img {
+                        border: 2px;
+                        max-height: 185px;
+                        width: auto !important;
+                        max-width: 100%;
+                        border-radius: 18px;
+                    }
+                    </style>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+
                 image_container.image(
                     image=st.session_state[f"image_for_display_{idx}"], 
                 )
 
-    st.space(size="medium")
+    st.space(size="small")
 
     
     # Continue button
