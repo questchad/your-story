@@ -1,12 +1,12 @@
-Uses 
-* Speech to Text: ElevenLabs API or Whisper (local) 
-* LLM: Anthropic API or Ollama (local)
-* Text to speech: ElevenLabs API
-
-
-# Debug mode
-* Will add more on-screen indicators of status
-* Will save the converted image as JPG, optimized if necessary for `MAX_IMAGE_SIZE` and `MAX_IMAGE_DIMENSION`, to `final_image.jpg`
+# Reminders
+* Components used 
+    * Speech to Text: ElevenLabs API (Whisper local may work too; this option was part of code copied from Passion Chat prototype) 
+    * LLM: Anthropic API or Ollama (local)
+    * Text to speech: ElevenLabs API
+* Debug mode
+    * Will add more on-screen indicators of status
+    * Will save the converted image as JPG, optimized if necessary for `MAX_IMAGE_SIZE` and `MAX_IMAGE_DIMENSION`, to `final_image.jpg`
+* Global fonts etc: in `.streamlit/config.toml`
 
 # Run locally
 1. Install `uv` on your machine if necessary

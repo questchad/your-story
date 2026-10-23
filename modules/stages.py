@@ -82,8 +82,8 @@ def display_upload_screen(config):
     st.space(size="large")
 
     # 2x2 Grid setup
-    row1_col1, row1_col2 = st.columns(2, gap="large", border=True)
-    row2_col1, row2_col2 = st.columns(2, gap="large", border=True)
+    row1_col1, row1_col2 = st.columns(2, gap="large", border=False)
+    row2_col1, row2_col2 = st.columns(2, gap="large", border=False)
     grid_cols = [row1_col1, row1_col2, row2_col1, row2_col2]
 
     for idx, (col, caption) in enumerate(zip(grid_cols, config["IMAGE_CAPTIONS"]), start=1):
@@ -97,10 +97,10 @@ def display_upload_screen(config):
                 border=False,
             )
             image_container =  image_outer_container.container(
-                height=130,
+                height=150,
                 horizontal_alignment="center",
                 vertical_alignment="center",
-                border=False # For debug
+                border=False 
             )
 
 
@@ -135,7 +135,7 @@ def display_upload_screen(config):
                 label_visibility="hidden"
             )
             
-            st.space("small")
+            st.space("large")
 
             if uploaded_file:
                 file_id = getattr(uploaded_file, "file_id", uploaded_file.name)
@@ -151,10 +151,24 @@ def display_upload_screen(config):
                     del st.session_state[f"processed_file_id_{idx}"]
     
             # Update the displayed image above
+            image_container.markdown(
+                """
+                <!-- Make the image fit without scrollbars -->
+                <style>
+                div[data-testid="stImageContainer"] img {
+                    border: 2px;
+                    max-height: 130px;
+                    width: auto !important;
+                    max-width: 100%;
+                    border-radius: 18px;
+                }
+                </style>
+                """,
+                unsafe_allow_html=True,
+            )
             if f"image_for_display_{idx}" in st.session_state:
                 image_container.image(
                     image=st.session_state[f"image_for_display_{idx}"], 
-                    width=250
                 )
 
     st.space(size="medium")
